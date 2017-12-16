@@ -95,7 +95,8 @@ public class PrototypeLXI extends Bot {
 	protected ArrayList<BotInfo> team =new ArrayList<BotInfo>();
 	//TeamName Checking Message
 	protected String teamMessage = "PandasRLife";
-
+	//This is to distinguish the alpha
+	Boolean isAlpha;
 	//This is to distinguish between both tanks, 0 if not tank.
 	protected int whichTank = 0;
 
@@ -214,6 +215,15 @@ public class PrototypeLXI extends Bot {
 		if(counter == 3){
 			whichTank();
 			formationCenter.setPos(myInfo.getX(), myInfo.getY());
+			BotInfo alpha = null;
+			for (BotInfo b: team){
+				if (b.getRole()==RoleType.TANK){
+					if (roleValues(b)[1] > roleValues(alpha)[1]){
+						//higher importance
+						alpha = b;
+					}
+				}
+			}
 		}
 		//System.out.println("team size = " + team.size() );
 		// If there are any bullets 
@@ -228,7 +238,6 @@ public class PrototypeLXI extends Bot {
 			noMoves = noSpecial(noMoves);
 		}
 		// add if for one bullet left
-
 		// Prevents moving into a grave
 		for (BotInfo b : deadBots) {
 			//Make sure this grave is not an ammo loot
@@ -709,6 +718,17 @@ public class PrototypeLXI extends Bot {
 		//returns closest grave with loot
 		return botHelper.findClosest(me, bulletsAvailArray);
 	}*/
+
+	public void alphaManager(){
+		if (isAlpha){
+			for (BotInfo teamBot: team){
+				if (teamBot != myInfo){
+
+				}
+			}
+		}
+
+	}
 
 	protected void updateFakeBotInfo(){}
 
@@ -2179,6 +2199,15 @@ public class PrototypeLXI extends Bot {
 
 	protected void whichTank(){
 		whichTank = 0;
+	}
+
+	protected int[] roleValues(BotInfo bot){
+		if (bot.getRole() == RoleType.TANK) return new int[]{5};
+		else if (bot.getRole() == RoleType.ATTACK) return new int[]{4};
+		else if (bot.getRole() == RoleType.MEDIC) return new int[]{2};
+		else if (bot.getRole() == RoleType.SUPPORT) return new int[]{3};
+		else if (bot.getRole() == RoleType.NOOB) return new int[]{1};
+		else return new int[]{0,0};
 	}
 
 	/*
